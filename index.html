@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<title>Screenwriter 2</title>
+		<link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:200' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script>
+		$(function () {
+			writeOut();
+		});
+		function writeOut() {
+			$("body").append("<p class='description'></p>");
+			var description = "An open-source word processor for screenplay writers.";
+			var i = 0;
+			var writingLoop = setInterval(function (){
+				console.log(description.substr(0, i));
+				$(".description").text(function () {
+					return description.substr(0, i);
+				});
+				if (i == description.length) {
+					clearInterval(writingLoop);
+				}
+				i++;
+			}, 75);
+		}
+		</script>
+		<style type="text/css">
+		body {
+			background-color: #33698C;
+		}
+		h1, .description {
+			text-align: center;
+			color: #97A081;
+		}
+		h1 {
+			padding-top: 12%;
+			font-family: "Source Code Pro", Courier;
+			font-weight: 200;
+			font-size: 4em;
+		}
+		.description {
+			font-size: 1.5em;
+			font-family: "Lato";
+			font-weight: 300;
+		}
+		</style>
+	</head>
+	<body>
+		<h1>Screenwriter</h1>
+	</body>
+</html>
