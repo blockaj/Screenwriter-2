@@ -3,13 +3,26 @@
 		<title>Screenwriter 2</title>
 		<link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:200' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="font-awesome-4.4.0/css/font-awesome.min.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script>
 		$(function () {
 			writeOut();
+			$(".fa-chevron-down").on('click',function (e) {
+	   			e.preventDefault();
+
+			    var target = this.hash;
+			    var $target = $(target);
+
+			    $('html, body').stop().animate({
+			        'scrollTop': $target.offset().top
+			    }, 900, 'swing', function () {
+			        window.location.hash = target;
+				});
+			});
 		});
 		function writeOut() {
-			$("body").append("<p class='description'></p>");
+			$("h1").after("<p class='description'></p>");
 			var description = "An open-source word processor for screenplay writers.";
 			var i = 0;
 			var writingLoop = setInterval(function (){
@@ -18,6 +31,8 @@
 					return description.substr(0, i);
 				});
 				if (i == description.length) {
+					$(".fa-chevron-down").animate({bottom: ".75em"}, 1000);
+					$(".fa-chevron-down").animate({bottom: "5px"}, 1000);
 					clearInterval(writingLoop);
 				}
 				i++;
@@ -28,7 +43,12 @@
 		body {
 			background-color: #33698C;
 		}
-		h1, .description {
+		.the-very-top {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+		h1, .description, .fa-chevron-down {
 			text-align: center;
 			color: #97A081;
 		}
@@ -43,9 +63,19 @@
 			font-family: "Lato";
 			font-weight: 300;
 		}
+		.fa-chevron-down {
+			width: 100%;
+			text-align: center;
+			font-size: 6em;
+			position: absolute;
+			bottom: -6em;
+		}
 		</style>
 	</head>
 	<body>
-		<h1>Screenwriter</h1>
+		<div class="the-very-top">
+			<h1>Screenwriter</h1>
+			<i class="fa fa-chevron-down"></i>
+		</div>
 	</body>
 </html>
