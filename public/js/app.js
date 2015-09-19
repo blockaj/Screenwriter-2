@@ -1,34 +1,16 @@
 var React = require("react");
+var ElIndex = require("./IndexManager");
+var Cursor = require("./Cursor");
+var cur = new Cursor();
+var screenplayEls = [];
+
+var index = new ElIndex();
 
 var ScreenplayElement = React.createClass({
-	handleKeyPress: function(e) {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			if (this.props.type == "scene-heading") {
-
-			}
-			else if (this.props.type == "action") {
-				console.log("New action to be created");
-			}
-			else if (this.props.type == "character") {
-				console.log("New dialogue to be created");
-			}
-			else if (this.props.type == "dialogue") {
-				console.log("New action to be created");
-			}
-		}
-	},
-	handleKeyDown: function(e) {
-		if (e.key == "Tab") {
-			e.preventDefault();
-			console.log("Change something");
-		}
-	},
 	render: function () {
 		var classString = this.props.type + " screenplay-el";
-
 		return (
-			<p className={classString} contentEditable onKeyPress={this.handleKeyPress} onKeyDown={this.handleKeyDown}><br /></p>
+			<p className={classString}><br /></p>
 		);
 	}
 });
@@ -36,7 +18,7 @@ var ScreenplayElement = React.createClass({
 var SceneHeading = React.createClass({
 	render: function() {
 		return (
-			<ScreenplayElement type="scene-heading" />
+			<ScreenplayElement type="scene-heading" elIndex={this.props.elIndex} />
 		);
 	}
 });
@@ -44,7 +26,7 @@ var SceneHeading = React.createClass({
 var Action = React.createClass({
 	render: function() {
 		return (
-			<ScreenplayElement type="action" />
+			<ScreenplayElement type="action" elIndex={this.props.elIndex} />
 		);
 	}
 });
@@ -52,7 +34,7 @@ var Action = React.createClass({
 var Character = React.createClass({
 	render: function() {
 		return (
-			<ScreenplayElement type="character" />
+			<ScreenplayElement type="character" elIndex={this.props.elIndex} />
 		);
 	}
 });
@@ -60,15 +42,28 @@ var Character = React.createClass({
 var Dialogue = React.createClass({
 	render: function() {
 		return (
-			<ScreenplayElement type="dialogue" />
+			<ScreenplayElement type="dialogue" elIndex={this.props.elIndex} />
 		);
 	}
-})
+});
 
 var DocumentBody = React.createClass({
+	getInitialState: function() {
+		screenplayEls.push(<SceneHeading elIndex={index.get()} />);
+		index.increment();
+		return {screenplayEls: screenplayEls};
+	},
+	handleKeyPress: function(e) {
+		if (e.key == "Enter") {
+			e.preventDefault();
+			screenplayEls.push(<Action elIndex={index.get()} />);
+			index.increment();
+			this.setState({screenplayEls: screenplayEls});
+		}
+	},
 	render: function() {
 		return (
-			<div className="writable-content"><SceneHeading /></div>
+			<div className="writable-content" onKeyPress={this.handleKeyPress} contentEditable>{this.state.screenplayEls}</div>
 		);
 	} 
 });
