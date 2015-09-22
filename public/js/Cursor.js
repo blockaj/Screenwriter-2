@@ -1,10 +1,14 @@
 // Controls cursor behavior 
-var ElIndex = require("./IndexManager");
-var index = new ElIndex();
+var index = require("./IndexManager");
 
 class Cursor {
 	constructor () {
 		console.log(index.get());
+	}
+	move (screenplayEls) {
+		for (let el in screenplayEls) {
+			console.log(el);
+		}
 	}
 }
 

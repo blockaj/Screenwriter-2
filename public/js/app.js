@@ -1,10 +1,12 @@
+/**
+ * 
+ */
+
 var React = require("react");
-var ElIndex = require("./IndexManager");
+var index = require("./IndexManager");
 var Cursor = require("./Cursor");
 var cur = new Cursor();
 var screenplayEls = [];
-
-var index = new ElIndex();
 
 var ScreenplayElement = React.createClass({
 	render: function () {
@@ -56,14 +58,20 @@ var DocumentBody = React.createClass({
 	handleKeyPress: function(e) {
 		if (e.key == "Enter") {
 			e.preventDefault();
+
+			// The cursor object must have the most recent version of all the 
+			// screenplay element in order to find where it should move
+			cur.move(screenplayEls);
 			screenplayEls.push(<Action elIndex={index.get()} />);
 			index.increment();
+
 			this.setState({screenplayEls: screenplayEls});
 		}
 	},
 	render: function() {
 		return (
-			<div className="writable-content" onKeyPress={this.handleKeyPress} contentEditable>{this.state.screenplayEls}</div>
+			<div className="writable-content" onKeyPress={this.handleKeyPress} 
+			contentEditable>{this.state.screenplayEls}</div>
 		);
 	} 
 });

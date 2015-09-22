@@ -16,5 +16,5 @@ class ElIndex {
 		this.elIndex++;
 	}
 }
-
-module.exports = ElIndex;
+var index = new ElIndex();
+module.exports = index;
