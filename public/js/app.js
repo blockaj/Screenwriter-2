@@ -1,81 +1,74 @@
-/**
- * 
- */
-
 var React = require("react");
-var index = require("./IndexManager");
-var Cursor = require("./Cursor");
-var cur = new Cursor();
-var screenplayEls = [];
 
+var elementList = ["Hello, world!", "Pop!"];
+
+// Content-editable p-tags are not editable without some content.
+// Therefore, we must start each new ScreenplayElement with a 
+// <br /> tag which will be destroyed as soon as the user begins
+// to edit. This React component is a wrapper for the <br /> tag.
+// 
+var BR = React.createClass({
+	vileHtml: function() {
+		return {__html: "<br />"};
+	},
+	render: function() {
+		return (
+			<span dangerouslySetInnerHTML={this.vileHtml()} />
+		);
+	}
+});
 var ScreenplayElement = React.createClass({
 	render: function () {
-		var classString = this.props.type + " screenplay-el";
+		var classString = this.props.elementType + " screenplay-element";
 		return (
-			<p className={classString}><br /></p>
+			<p className={classString} key={this.props.key}>{this.props.children}</p>
 		);
 	}
 });
 
-var SceneHeading = React.createClass({
-	render: function() {
+var ScreenplayElements = React.createClass({
+	propTypes: {
+		listOfElements: React.PropTypes.array.isRequired
+	},
+	render: function () {
+		var listOfElements = this.props.listOfElements,
+			renderedElements = [];
+		for (var key in listOfElements) {
+			renderedElements.push(
+				<ScreenplayElement elementType="scene-heading" key={key}>
+					{listOfElements[key]}
+				</ScreenplayElement>
+			);
+		}
 		return (
-			<ScreenplayElement type="scene-heading" elIndex={this.props.elIndex} />
-		);
-	}
-});
-
-var Action = React.createClass({
-	render: function() {
-		return (
-			<ScreenplayElement type="action" elIndex={this.props.elIndex} />
-		);
-	}
-});
-
-var Character = React.createClass({
-	render: function() {
-		return (
-			<ScreenplayElement type="character" elIndex={this.props.elIndex} />
-		);
-	}
-});
-
-var Dialogue = React.createClass({
-	render: function() {
-		return (
-			<ScreenplayElement type="dialogue" elIndex={this.props.elIndex} />
+			<div>{renderedElements}</div>
 		);
 	}
 });
 
 var DocumentBody = React.createClass({
-	getInitialState: function() {
-		screenplayEls.push(<SceneHeading elIndex={index.get()} />);
-		index.increment();
-		return {screenplayEls: screenplayEls};
-	},
-	handleKeyPress: function(e) {
-		if (e.key == "Enter") {
-			e.preventDefault();
-
-			// The cursor object must have the most recent version of all the 
-			// screenplay element in order to find where it should move
-			cur.move(screenplayEls);
-			screenplayEls.push(<Action elIndex={index.get()} />);
-			index.increment();
-
-			this.setState({screenplayEls: screenplayEls});
+	getInitialState: function () {
+		return {
+			screenplayEls: <ScreenplayElements listOfElements={elementList} />
 		}
 	},
-	render: function() {
+	handleKeyPress: function (e) {
+		if (e.key == "Enter") {
+			e.preventDefault();
+			elementList.push("Another one.");
+			this.setState({
+				screenplayEls: <ScreenplayElements listOfElements={elementList} />
+			});
+		}
+	},
+	render: function () {
 		return (
-			<div className="writable-content" onKeyPress={this.handleKeyPress} 
-			contentEditable>{this.state.screenplayEls}</div>
-		);
-	} 
+			<div contentEditable onKeyPress={this.handleKeyPress}>
+				{this.state.screenplayEls}
+			</div>
+		)
+	}
 });
-	
 React.render(
 	<DocumentBody />,
 	document.getElementById("document-body")

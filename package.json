@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/blockaj/screenwriter.git"
   },
-  "main": "views/index.html",
+  "main": "main.js",
   "dependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.1.0",
