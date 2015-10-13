@@ -1,6 +1,10 @@
 var React = require("react");
 
-var elementList = [<ScreenplayElement elementType="scene-heading"><BR /></ScreenplayElement>];
+//Element list holds all 
+var elementList = [{
+	"elementType": "scene-heading",
+	"text": "Int. Office -Day"
+}];
 
 // Content-editable p-tags are not editable without some content.
 // Therefore, we must start each new ScreenplayElement with a 
@@ -16,6 +20,8 @@ var BR = React.createClass({
 		);
 	}
 });
+
+//Represents one screenplay element
 var ScreenplayElement = React.createClass({
 	render: function () {
 		var classString = this.props.elementType + " screenplay-element";
@@ -32,10 +38,12 @@ var ScreenplayElements = React.createClass({
 	render: function () {
 		var listOfElements = this.props.listOfElements,
 			renderedElements = [];
+
 		for (var key in listOfElements) {
+			var screenplayEl = listOfElements[key];
 			renderedElements.push(
-				<ScreenplayElement elementType="scene-heading" key={key}>
-					{listOfElements[key]}
+				<ScreenplayElement elementType={screenplayEl.elementType} key={key}>
+					{screenplayEl.text}
 				</ScreenplayElement>
 			);
 		}
@@ -54,7 +62,10 @@ var DocumentBody = React.createClass({
 	handleKeyPress: function (e) {
 		if (e.key == "Enter") {
 			e.preventDefault();
-			elementList.push("Another one.");
+			elementList.push({
+				"elementType": "scene-heading",
+				"text": "Int. Office -Day"
+			});
 			this.setState({
 				screenplayEls: <ScreenplayElements listOfElements={elementList} />
 			});
