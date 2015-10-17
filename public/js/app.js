@@ -65,6 +65,8 @@ var ScreenplayElement = React.createClass({
 	}
 });
 
+// ScreenplayElements takes an array of objects with text and elementType fields
+// and turns them into React components that are injected into the HTML. 
 var ScreenplayElements = React.createClass({
 	propTypes: {
 		listOfElements: React.PropTypes.array.isRequired
@@ -88,6 +90,11 @@ var ScreenplayElements = React.createClass({
 	}
 });
 
+// DocumentBody is contentEditable. Because of this, it also handles when the
+// return key is hit. The screenplayEls state is a React component that holds
+// the ScreenplayElements component. It implements the component with an
+// elementList which the ScreenplayElements then turns into individual React
+// components. 
 var DocumentBody = React.createClass({
 	getInitialState: function () {
 		return {
@@ -121,6 +128,10 @@ React.render(
 	document.getElementById("document-body")
 );
 
+// This is not React related. The purpose of this function is to move the cursor
+// the way it normally would after the user hit the return key. We are
+// preventing the default behavior when a user hits the return key so we can
+// change what type of content gets added to the html. 
 function moveCursor(key) {
 	var documentContent = document.getElementById("doc-content");
 	var elList = documentContent.children[0].children;
